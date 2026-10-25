@@ -1,0 +1,34 @@
+<main>
+  <h1>Central login test</h1>
+  <p class="hint">Browser &rarr; gateway (cookie) &rarr; demo API (bearer token). This page never sees a token.</p>
+
+  @if (!checked()) {
+    <p>Checking session...</p>
+  } @else if (user(); as u) {
+    <section class="card ok">
+      <h2>Logged in</h2>
+      <p>Subject: <strong>{{ u.subject }}</strong></p>
+      <p>Roles: <strong>{{ u.roles.length ? u.roles.join(', ') : '(none)' }}</strong></p>
+      <div class="buttons">
+        <button (click)="call('/api/demo/hello')">Call API: hello</button>
+        <button (click)="call('/api/demo/headers')">Call API: headers the API received</button>
+        <button class="secondary" (click)="logout()">Logout</button>
+      </div>
+    </section>
+  } @else {
+    <section class="card">
+      <h2>Not logged in</h2>
+      <p>No session cookie (the gateway answered 401).</p>
+      <div class="buttons">
+        <button (click)="login()">Login</button>
+      </div>
+    </section>
+  }
+
+  @if (resultTitle()) {
+    <section class="card">
+      <h2>{{ resultTitle() }}</h2>
+      <pre>{{ result() }}</pre>
+    </section>
+  }
+</main>
